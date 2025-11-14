@@ -33,6 +33,7 @@ class FeatureEngineer:
     def create_engineered_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Create engineered features from raw demographic data.
+        Phase 1 Improvement: Added interaction features.
 
         Args:
             df: DataFrame with demographic features
@@ -56,6 +57,35 @@ class FeatureEngineer:
             bins=config.INCOME_BRACKETS,
             labels=config.INCOME_LABELS,
             include_lowest=True
+        )
+
+        # PHASE 1 IMPROVEMENT: Interaction Features
+        # Income per age (wealth accumulation indicator)
+        df_features['income_per_age'] = (
+            df_features['Estimated Annual Gross Income'] /
+            (df_features['Age as of Billing Start Date'] + 1)  # +1 to avoid division by zero
+        )
+
+        # Age × Income interaction (normalized)
+        df_features['age_income_interaction'] = (
+            df_features['Age as of Billing Start Date'] *
+            df_features['Estimated Annual Gross Income'] / 1000000
+        )
+
+        # Income to pay frequency ratio (monthly income indicator)
+        df_features['income_pay_ratio'] = (
+            df_features['Estimated Annual Gross Income'] /
+            (df_features['Pay Frequency'] + 1)
+        )
+
+        # Age squared (for non-linear age effects)
+        df_features['age_squared'] = (
+            df_features['Age as of Billing Start Date'] ** 2 / 1000
+        )
+
+        # Income log (for better distribution)
+        df_features['income_log'] = np.log1p(
+            df_features['Estimated Annual Gross Income']
         )
 
         return df_features
@@ -107,6 +137,7 @@ class FeatureEngineer:
                               is_training: bool = True) -> pd.DataFrame:
         """
         Scale numeric features using StandardScaler.
+        Phase 1 Improvement: Includes interaction features.
 
         Args:
             df: DataFrame with numeric features
@@ -117,9 +148,17 @@ class FeatureEngineer:
         """
         df_scaled = df.copy()
 
-        # Numeric columns to scale
-        numeric_cols = ['Age as of Billing Start Date', 'Pay Frequency',
-                       'Estimated Annual Gross Income']
+        # Numeric columns to scale (original + interaction features)
+        numeric_cols = [
+            'Age as of Billing Start Date',
+            'Pay Frequency',
+            'Estimated Annual Gross Income',
+            'income_per_age',
+            'age_income_interaction',
+            'income_pay_ratio',
+            'age_squared',
+            'income_log'
+        ]
 
         if is_training:
             # Fit and transform
