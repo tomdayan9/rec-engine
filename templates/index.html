@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Recommendation Engine | Cakewalk Benefits</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#005dfe',
+                        'primary-blue-hover': '#0051dc',
+                        'primary-blue-light': '#5791f3',
+                        'text-primary': '#0a214a',
+                        'text-secondary': '#424b5b',
+                        'text-tertiary': '#5d6b85',
+                        'bg-primary': '#ffffff',
+                        'bg-secondary': '#f8f9fa',
+                        'bg-accent': '#f4f8ff',
+                        'bg-blue-light': '#eaf2ff',
+                        'success': '#15cb94',
+                        'success-light': '#e3faf3',
+                        'success-border': '#8deddb',
+                        'warning': '#bf6432',
+                        'warning-light': '#faede3',
+                        'error': '#d44848',
+                        'error-light': '#ffeaea',
+                    },
+                    fontFamily: {
+                        'space-grotesk': ['Space Grotesk', 'sans-serif'],
+                        'dm-sans': ['DM Sans', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .spinner {
+            border: 3px solid #eaf2ff;
+            border-top: 3px solid #005dfe;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 500ms ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-bg-secondary min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-bg-primary border-b border-gray-200">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="font-space-grotesk font-bold text-[32px] leading-tight text-text-primary">
+                        Insurance Recommendation Engine
+                    </h1>
+                    <p class="font-dm-sans text-[14px] text-text-tertiary mt-1">
+                        Get personalized insurance recommendations based on your profile
+                    </p>
+                </div>
+                <div class="hidden sm:flex items-center gap-2 bg-bg-blue-light px-4 py-2 rounded-lg">
+                    <svg class="w-5 h-5 text-primary-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span class="font-dm-sans text-[14px] font-medium text-primary-blue">AI-Powered</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-[1200px] mx-auto px-4 sm:px-8 py-8">
+
+        <!-- Input Form Card -->
+        <div class="bg-bg-primary rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
+            <h2 class="font-dm-sans font-semibold text-[20px] leading-tight text-primary-blue mb-6">
+                Your Information
+            </h2>
+
+            <form id="recommendationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Age -->
+                <div>
+                    <label for="age" class="block font-dm-sans text-[14px] font-medium text-text-secondary mb-2">
+                        Age *
+                    </label>
+                    <input
+                        type="number"
+                        id="age"
+                        name="age"
+                        required
+                        min="18"
+                        max="100"
+                        placeholder="35"
+                        class="w-full px-3 py-3 rounded-lg border border-gray-300 font-dm-sans text-[14px] text-text-secondary focus:border-primary-blue focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 transition-all duration-200"
+                        data-track="form-personal-details-age-input"
+                    >
+                </div>
+
+                <!-- Annual Income -->
+                <div>
+                    <label for="income" class="block font-dm-sans text-[14px] font-medium text-text-secondary mb-2">
+                        Annual Income ($) *
+                    </label>
+                    <input
+                        type="number"
+                        id="income"
+                        name="income"
+                        required
+                        min="0"
+                        placeholder="75000"
+                        class="w-full px-3 py-3 rounded-lg border border-gray-300 font-dm-sans text-[14px] text-text-secondary focus:border-primary-blue focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 transition-all duration-200"
+                        data-track="form-personal-details-income-input"
+                    >
+                </div>
+
+                <!-- Sex -->
+                <div>
+                    <label for="sex" class="block font-dm-sans text-[14px] font-medium text-text-secondary mb-2">
+                        Sex *
+                    </label>
+                    <select
+                        id="sex"
+                        name="sex"
+                        required
+                        class="w-full px-3 py-3 rounded-lg border border-gray-300 font-dm-sans text-[14px] text-text-secondary focus:border-primary-blue focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 transition-all duration-200"
+                        data-track="form-personal-details-sex-select"
+                    >
+                        <option value="">Select...</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <!-- State -->
+                <div>
+                    <label for="state" class="block font-dm-sans text-[14px] font-medium text-text-secondary mb-2">
+                        State *
+                    </label>
+                    <input
+                        type="text"
+                        id="state"
+                        name="state"
+                        required
+                        maxlength="2"
+                        placeholder="CA"
+                        class="w-full px-3 py-3 rounded-lg border border-gray-300 font-dm-sans text-[14px] text-text-secondary uppercase focus:border-primary-blue focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 transition-all duration-200"
+                        data-track="form-personal-details-state-input"
+                    >
+                </div>
+
+                <!-- Job Class -->
+                <div class="md:col-span-2">
+                    <label for="job_class" class="block font-dm-sans text-[14px] font-medium text-text-secondary mb-2">
+                        Job Class *
+                    </label>
+                    <select
+                        id="job_class"
+                        name="job_class"
+                        required
+                        class="w-full px-3 py-3 rounded-lg border border-gray-300 font-dm-sans text-[14px] text-text-secondary focus:border-primary-blue focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 transition-all duration-200"
+                        data-track="form-personal-details-job-class-select"
+                    >
+                        <option value="">Select...</option>
+                        <option value="Professional">Professional</option>
+                        <option value="Agent">Agent</option>
+                        <option value="Management">Management</option>
+                        <option value="Staff">Staff</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="md:col-span-2 mt-4">
+                    <button
+                        type="submit"
+                        id="submitBtn"
+                        class="w-full bg-primary-blue hover:bg-primary-blue-hover text-white font-dm-sans font-semibold text-[16px] px-6 py-3 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-primary-blue focus:ring-offset-2"
+                        data-track="action-benefits-selection-get-recommendations-button-click"
+                    >
+                        Get Recommendations
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden bg-bg-primary rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="font-dm-sans text-[16px] text-text-secondary">Analyzing your profile...</p>
+        </div>
+
+        <!-- Results Container -->
+        <div id="resultsContainer" class="hidden fade-in">
+            <!-- Summary Card -->
+            <div class="bg-bg-primary rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+                <h2 class="font-dm-sans font-semibold text-[20px] leading-tight text-primary-blue mb-4">
+                    Recommendation Summary
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-success-light border border-success-border rounded-xl p-4">
+                        <p class="font-dm-sans text-[12px] text-text-tertiary mb-1">Recommended Plans</p>
+                        <p id="totalRecommended" class="font-dm-sans font-bold text-[24px] text-success">-</p>
+                    </div>
+                    <div class="bg-bg-blue-light border border-blue-200 rounded-xl p-4">
+                        <p class="font-dm-sans text-[12px] text-text-tertiary mb-1">Monthly Premium</p>
+                        <p id="monthlyPremium" class="font-dm-sans font-bold text-[24px] text-primary-blue">-</p>
+                    </div>
+                    <div class="bg-bg-accent border border-blue-200 rounded-xl p-4">
+                        <p class="font-dm-sans text-[12px] text-text-tertiary mb-1">Annual Premium</p>
+                        <p id="annualPremium" class="font-dm-sans font-bold text-[24px] text-text-primary">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plans List -->
+            <div class="bg-bg-primary rounded-2xl border border-gray-200 shadow-sm p-6">
+                <h2 class="font-dm-sans font-semibold text-[20px] leading-tight text-primary-blue mb-6">
+                    Your Personalized Plan Recommendations
+                </h2>
+                <div id="plansList" class="space-y-3">
+                    <!-- Plans will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-[1200px] mx-auto px-4 sm:px-8 py-8 mt-8 border-t border-gray-200">
+        <p class="font-dm-sans text-[12px] text-text-tertiary text-center">
+            Powered by Machine Learning • Random Forest Models • 85.77% Accuracy
+        </p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+
+</body>
+</html>
